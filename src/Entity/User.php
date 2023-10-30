@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -25,9 +26,11 @@ class User
     private ?int $id = null;
     #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     private ?string $firstName = null;
     #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     private ?string $lastName = null;
     #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
