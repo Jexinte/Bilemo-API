@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
@@ -13,7 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`user`')]
 #[ApiResource(operations: [
     new Get(normalizationContext:['groups' => 'read:User:Item']),
-    new Post(denormalizationContext: ['groups' => 'create:User:Item'])
+    new Post(denormalizationContext: ['groups' => 'create:User:Item']),
+    new Delete()
 ])]
 class User
 {
