@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,7 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(normalizationContext:['groups' => ['read:Customer:Item','read:User:Collection']])
+        new Get(normalizationContext:['groups' => ['read:Customer:Item','read:User:Collection']]),
+
     ]
 )]
 class Customer
