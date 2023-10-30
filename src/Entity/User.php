@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(operations: [
+    new Get(normalizationContext:['groups' => 'read:User:Item']),
     new Post(denormalizationContext: ['groups' => 'create:User:Item'])
 ])]
 class User
@@ -19,13 +21,13 @@ class User
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    #[Groups('create:User:Item')]
+    #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
-    #[Groups('create:User:Item')]
+    #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
-    #[Groups('create:User:Item')]
+    #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Customer $customer = null;
 
