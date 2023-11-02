@@ -11,37 +11,40 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    operations :[
-    new Get(normalizationContext: ['groups ' => 'read:Product:Collection']),
-    new GetCollection(normalizationContext: ['groups ' => 'read:Product:Collection'])]
+    operations: [
+        new Get(normalizationContext: ['groups ' => 'read:Product:collection']),
+        new GetCollection(
+            normalizationContext: ['groups ' => 'read:Product:collection']
+        )
+    ]
 )]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-     #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     private ?string $brand = null;
-     #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-     #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     #[ORM\Column]
     private ?float $price = null;
-     #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $os = null;
-     #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $color = null;
-     #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $storage = null;
-     #[Groups(['read:Product:Collection'])]
+    #[Groups(['read:Product:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 

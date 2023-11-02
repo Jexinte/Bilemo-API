@@ -14,8 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(operations: [
-    new Get(normalizationContext:['groups' => 'read:User:Item']),
-    new Post(denormalizationContext: ['groups' => 'create:User:Item']),
+    new Get(normalizationContext: ['groups' => 'read:User:item']),
+    new Post(denormalizationContext: ['groups' => 'create:User:item']),
     new Delete()
 ])]
 class User
@@ -24,8 +24,8 @@ class User
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    #[Groups(['read:User:Item','create:User:Item'])]
-    #[ORM\Column(length: 255,unique: true)]
+    #[Groups(['read:User:item', 'create:User:item'])]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     #[Assert\Regex(
         pattern: "/^[A-ZÀ-ÿ][A-Za-zÀ-ÿ, .'\-\n]*$/u",
@@ -33,8 +33,8 @@ class User
         match: true,
     )]
     private ?string $firstName = null;
-    #[Groups(['read:User:Item','create:User:Item'])]
-    #[ORM\Column(length: 255,unique: true)]
+    #[Groups(['read:User:item', 'create:User:item'])]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     #[Assert\Regex(
         pattern: "/^[A-ZÀ-ÿ][A-Za-zÀ-ÿ, .'\-\n]*$/u",
@@ -42,9 +42,9 @@ class User
         match: true,
     )]
     private ?string $lastName = null;
-    #[Groups(['read:User:Item','create:User:Item'])]
+    #[Groups(['read:User:item', 'create:User:item'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(name: 'customer_id',referencedColumnName: 'id',nullable: false)]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide ! Veuillez spécifier le client auquel l\'utilisateur doit être affilié.')]
     private Customer $customer;
 

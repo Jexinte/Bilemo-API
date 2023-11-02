@@ -17,8 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(normalizationContext: [
             'groups' => [
-                'read:Customer:Item',
-                'read:User:Collection'
+                'read:Customer:item',
+                'read:User:collection'
             ]
         ]),
 
@@ -29,11 +29,11 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read:Customer:Item'])]
+    #[Groups(['read:Customer:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:Customer:Item'])]
+    #[Groups(['read:Customer:item'])]
     private ?string $company = null;
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -44,7 +44,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: User::class)]
-    #[Groups(['read:User:Collection'])]
+    #[Groups(['read:User:collection'])]
     private Collection $users;
 
     public function __construct()
