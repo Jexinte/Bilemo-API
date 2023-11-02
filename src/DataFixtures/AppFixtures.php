@@ -2,12 +2,11 @@
 /**
  * PHP version 8.
  *
- * @category Controller
- *
- * @author  Yokke <mdembelepro@gmail.com>
- * @license ISC License
- *
- * @see https://github.com/Jexinte/P7---Bilemo
+ * @category DataFixtures
+ * @package  AppFixtures
+ * @author   Yokke <mdembelepro@gmail.com>
+ * @license  ISC License
+ * @link     https://github.com/Jexinte/P7---Bilemo
  */
 
 namespace App\DataFixtures;
@@ -16,10 +15,19 @@ use App\Entity\Customer;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Exception as ExceptionAlias;
 use Faker;
 
 class AppFixtures extends Fixture
 {
+    /**
+     * Summary of load
+     *
+     * @param ObjectManager $manager
+     *
+     * @return void
+     * @throws ExceptionAlias
+     */
     public function load(ObjectManager $manager): void
     {
         $faker = Faker\Factory::create();
