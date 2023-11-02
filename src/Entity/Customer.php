@@ -50,6 +50,9 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    /**
+     * @var array<string>
+     */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
