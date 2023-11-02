@@ -1,4 +1,14 @@
 <?php
+/**
+ * PHP version 8.
+ *
+ * @category Controller
+ *
+ * @author  Yokke <mdembelepro@gmail.com>
+ * @license ISC License
+ *
+ * @see https://github.com/Jexinte/P7---Bilemo
+ */
 
 namespace App\DataFixtures;
 
@@ -12,9 +22,8 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-
         $faker = Faker\Factory::create();
-        for ($i = 0; $i < 40; $i++) {
+        for ($i = 0; $i < 40; ++$i) {
             $customer = new Customer();
             $customer->setCompany($faker->company());
             $customer->setRoles(['ROLE_CUSTOMER']);
@@ -22,7 +31,7 @@ class AppFixtures extends Fixture
             $manager->persist($customer);
         }
 
-        for ($i = 0; $i < 40; $i++) {
+        for ($i = 0; $i < 40; ++$i) {
             $user = new User();
             $user->setCustomer($customers[array_rand($customers)]);
             $user->setFirstName($faker->firstName());
@@ -30,9 +39,6 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
-
         $manager->flush();
     }
-
-
 }

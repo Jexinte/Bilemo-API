@@ -1,4 +1,3 @@
 grumphp:
   tasks:
-    phpcsfixer: ~
     phpstan: ~

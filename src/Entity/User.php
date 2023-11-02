@@ -1,4 +1,13 @@
 <?php
+/**
+ * PHP version 8.
+ *
+ * @category Entity
+ * @package  User
+ * @author   Yokke <mdembelepro@gmail.com>
+ * @license  ISC License
+ * @link     https://github.com/Jexinte/P7---Bilemo
+ */
 
 namespace App\Entity;
 
@@ -13,11 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource(operations: [
+#[ApiResource(
+    operations: [
     new Get(normalizationContext: ['groups' => 'read:User:item']),
     new Post(denormalizationContext: ['groups' => 'create:User:item']),
-    new Delete()
-])]
+    new Delete(),
+    ]
+)]
 class User
 {
     #[ORM\Id]
@@ -48,16 +59,33 @@ class User
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide ! Veuillez spécifier le client auquel l\'utilisateur doit être affilié.')]
     private Customer $customer;
 
+    /**
+     * Summary of getId
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Summary of getFirstName
+     *
+     * @return string|null
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * Summary of setFirstName
+     *
+     * @param string $firstName 
+     *
+     * @return $this
+     */
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
@@ -65,11 +93,23 @@ class User
         return $this;
     }
 
+    /**
+     * Summary of getLastName
+     *
+     * @return string|null
+     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
+    /**
+     * Summary of setLastName
+     *
+     * @param string $lastName  
+     *
+     * @return $this
+     */
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
@@ -77,11 +117,23 @@ class User
         return $this;
     }
 
+    /**
+     * Summary of getCustomer
+     *
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
+    /**
+     * Summary of setCustomer
+     *
+     * @param Customer|null $customer   
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
