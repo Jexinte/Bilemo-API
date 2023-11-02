@@ -25,16 +25,28 @@ class User
     #[ORM\Column]
     private ?int $id = null;
     #[Groups(['read:User:Item','create:User:Item'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,unique: true)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
+    #[Assert\Regex(
+        pattern: "/^[A-ZÀ-ÿ][A-Za-zÀ-ÿ, .'\-\n]*$/u",
+        message: 'Oops! Le format de votre saisie est incorrect, le prénom doit commencer par une lettre majuscule',
+        match: true,
+    )]
     private ?string $firstName = null;
     #[Groups(['read:User:Item','create:User:Item'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,unique: true)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
+    #[Assert\Regex(
+        pattern: "/^[A-ZÀ-ÿ][A-Za-zÀ-ÿ, .'\-\n]*$/u",
+        message: 'Oops! Le format de votre saisie est incorrect, le nom doit commencer par une lettre majuscule',
+        match: true,
+    )]
     private ?string $lastName = null;
     #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Customer $customer = null;
+    #[ORM\JoinColumn(name: 'customer_id',referencedColumnName: 'id',nullable: false)]
+    #[Assert\NotBlank(message: 'Ce champ ne peut être vide ! Veuillez spécifier le client auquel l\'utilisateur doit être affilié.')]
+    private Customer $customer;
 
     public function getId(): ?int
     {

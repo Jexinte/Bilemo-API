@@ -12,11 +12,11 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+
         $faker = Faker\Factory::create();
         for ($i = 0; $i < 40; $i++) {
             $customer = new Customer();
             $customer->setCompany($faker->company());
-            $customer->setPassword(password_hash('1234', PASSWORD_BCRYPT));
             $customer->setRoles(['ROLE_CUSTOMER']);
             $customers[] = $customer;
             $manager->persist($customer);
