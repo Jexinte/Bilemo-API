@@ -3,25 +3,36 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource]
+#[ApiResource(operations: [
+    new Get(normalizationContext:['groups' => 'read:User:Item']),
+    new Post(denormalizationContext: ['groups' => 'create:User:Item']),
+    new Delete()
+])]
 class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     private ?string $firstName = null;
-
+    #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     private ?string $lastName = null;
-
+    #[Groups(['read:User:Item','create:User:Item'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Customer $customer = null;
 
