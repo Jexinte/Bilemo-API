@@ -14,6 +14,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,11 +23,179 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+
 #[ApiResource(
     operations: [
-    new Get(normalizationContext: ['groups' => 'read:User:item']),
-    new Post(denormalizationContext: ['groups' => 'create:User:item']),
-    new Delete(),
+    new GetCollection(routeName: 'getUsers', openapiContext: [
+        'responses' => [
+            '200' => [
+                'description' => 'User Collection',
+                'content' => [
+                    "application/ld+json" => [
+                        "schema" => [
+                            "type" =>  "object",
+                            "example" => [
+                                "id" => 1,
+                               "firstName" => "John",
+                                "lastName" => "Doe",
+                                "customer" => "\/api\/customers\/1"
+                            ]
+                        ]
+                    ]
+                ]
+
+            ],
+            '401' => [
+                'description' => 'Error : Unauthorized',
+                'content' => [
+                    "application/json" => [
+                        "schema" => [
+                            "type" =>  "object",
+                            "example" => [
+                                'code' => 401,
+                                'message' => 'JWT Token not found'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            '404' => [
+                'description' => 'Resource not found',
+                'content' => [
+                    "application/json" => [
+                        "schema" => [
+                            "type" =>  "string",
+                            "example" => [
+                                "message" => 'User resource not found!'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ]
+    ], normalizationContext: ['groups' => 'read:User:Collection']),
+    new Get(
+        routeName: 'getUser',
+        openapiContext: [
+        'responses' => [
+            '200' => [
+                'description' => 'User Resource',
+                'content' => [
+                    "application/json" => [
+                        "schema" => [
+                            "type" =>  "object",
+                            "example" => [
+                                'id' => "1",
+                                'firstName' => "John",
+                                'lastName' => "Doe",
+                                "customer" => "\/api\/customers\/46"
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            '403' => [
+                'description' => 'Forbidden',
+                'content' => [
+                    "application/ld+json" => [
+                        "schema" => [
+                            "type" =>  "string",
+                            "example" => [
+                                "message" => 'Access Denied.'
+                            ]
+                        ]
+                    ]
+                ]
+                ],
+            '404' => [
+                'description' => 'Resource not found',
+                'content' => [
+                    "application/ld+json" => [
+                        "schema" => [
+                            "type" =>  "string",
+                            "example" => [
+                                "message" => 'User resource not found!'
+                            ]
+                        ]
+                    ]
+                ]
+                ]
+        ],
+        ],
+        normalizationContext: ['groups' => 'read:User:item']
+    ),
+    new Post(
+        openapiContext: [
+            'requestBody' => [
+                'content' => [
+                    "application/ld+json" => [
+                        "schema" => [
+                            "type" =>  "object",
+                            "example" => [
+                                'firstName' => "Ada",
+                                'lastName' => "Lovelace",
+                                "customer" => "/api/customers/1"
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'responses' => [
+                '201' => [
+                    'description' => 'User Resource created',
+                    'content' => [
+                        "application/ld+json" => [
+                            "schema" => [
+                                "type" =>  "object",
+                                "example" => [
+                                        "id" => 100,
+                                        "firstName" => "Ada",
+                                        "lastName" => "Lovelace",
+                                        "customer" => "\/api\/customers\/1"
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+
+            ]
+        ],
+        denormalizationContext: ['groups' => 'create:User:item'],
+    ),
+    new Delete(routeName: 'deleteUser', openapiContext: [
+        'responses' => [
+            '204' => [
+                'description' => 'No Content'
+            ],
+            '403' => [
+                'description' => 'Forbidden',
+                'content' => [
+                    "application/json" => [
+                        "schema" => [
+                            "type" =>  "string",
+                            "example" => [
+                                "message" => 'Access Denied.'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            '404' => [
+                'description' => 'Resource not found',
+                'content' => [
+                    "application/json" => [
+                        "schema" => [
+                            "type" =>  "string",
+                            "example" => [
+                                "message" => 'User resource not found!'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+    ]),
     ]
 )]
 class User
@@ -34,6 +203,7 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('read:User:item')]
     private ?int $id = null;
     #[Groups(['read:User:item', 'create:User:item'])]
     #[ORM\Column(length: 255)]
@@ -82,7 +252,7 @@ class User
     /**
      * Summary of setFirstName
      *
-     * @param string $firstName 
+     * @param string $firstName
      *
      * @return $this
      */
@@ -106,7 +276,7 @@ class User
     /**
      * Summary of setLastName
      *
-     * @param string $lastName  
+     * @param string $lastName
      *
      * @return $this
      */
@@ -130,7 +300,7 @@ class User
     /**
      * Summary of setCustomer
      *
-     * @param Customer|null $customer   
+     * @param Customer|null $customer
      *
      * @return $this
      */

@@ -32,7 +32,7 @@ class CustomerRepository extends ServiceEntityRepository
     /**
      * Summary of __construct
      *
-     * @param ManagerRegistry $registry 
+     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

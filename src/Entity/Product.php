@@ -21,8 +21,106 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(normalizationContext: ['groups ' => 'read:Product:collection']),
+        new Get(
+            openapiContext: [
+            'responses' => [
+                '200' => [
+                    'description' => 'Products Collection',
+                    'content' => [
+                        "application/ld+json" => [
+                            "schema" => [
+                                "type" =>  "object",
+                                "example" => [
+                                    "id" => 1,
+                                    "brand" => "BileMo",
+                                    "name" => "BileMo 1",
+                                    "price" => 857.61,
+                                    "os" => "Android",
+                                    "color" => "Black",
+                                    "storage" => "128GB",
+                                    "slug" => "bilemo-1"
+                                ]
+                            ]
+                        ]
+                    ]
+
+                ],
+                '401' => [
+                    'description' => 'Error : Unauthorized',
+                    'content' => [
+                        "application/ld+json" => [
+                            "schema" => [
+                                "type" =>  "object",
+                                "example" => [
+                                    'code' => 401,
+                                    'message' => 'JWT Token not found'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                '404' => [
+                    'description' => 'Product resource not found',
+                    'content' => [
+                        "application/ld+json" => [
+                            "schema" => [
+                                "type" =>  "object",
+                                "example" => [
+                                    'title' => "An error occured",
+                                    'detail' => 'Not Found',
+                                    'status' => 404,
+                                    '...' => '...'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+
+            ]
+        ],
+            normalizationContext: ['groups ' => 'read:Product:item']
+        ),
         new GetCollection(
+            openapiContext: [
+                'responses' => [
+                    '200' => [
+                        'description' => 'Product Collection',
+                        'content' => [
+                            "application/ld+json" => [
+                                "schema" => [
+                                    "type" =>  "object",
+                                    "example" => [
+                                        "id" => 1,
+                                        "brand" => "BileMo",
+                                        "name" => "BileMo 1",
+                                        "price" => 857.61,
+                                        "os" => "Android",
+                                        "color" => "Black",
+                                        "storage" => "128GB",
+                                        "slug" => "bilemo-1"
+                                    ]
+                                ]
+                            ]
+                        ]
+
+                    ],
+                    '401' => [
+                        'description' => 'Error : Unauthorized',
+                        'content' => [
+                            "application/ld+json" => [
+                                "schema" => [
+                                    "type" =>  "object",
+                                    "example" => [
+                                        'code' => 401,
+                                        'message' => 'JWT Token not found'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+
+                ]
+            ],
             normalizationContext: ['groups ' => 'read:Product:collection']
         ),
     ]
@@ -34,28 +132,28 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     private ?string $brand = null;
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     #[ORM\Column]
     private ?float $price = null;
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     #[ORM\Column(length: 255)]
     private ?string $os = null;
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     #[ORM\Column(length: 255)]
     private ?string $color = null;
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     #[ORM\Column(length: 255)]
     private ?string $storage = null;
-    #[Groups(['read:Product:collection'])]
+    #[Groups(['read:Product:collection','read:Product:item'])]
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
@@ -227,7 +325,7 @@ class Product
      * Summary of setSlug
      *
      * @param string $slug
-     * 
+     *
      * @return $this
      */
     public function setSlug(string $slug): static
