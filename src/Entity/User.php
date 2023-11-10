@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
+use App\State\UserStateProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,179 +27,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-    new GetCollection(routeName: 'getUsers', openapiContext: [
-        'responses' => [
-            '200' => [
-                'description' => 'User Collection',
-                'content' => [
-                    "application/ld+json" => [
-                        "schema" => [
-                            "type" =>  "object",
-                            "example" => [
-                                "id" => 1,
-                               "firstName" => "John",
-                                "lastName" => "Doe",
-                                "customer" => "\/api\/customers\/1"
-                            ]
-                        ]
-                    ]
-                ]
-
-            ],
-            '401' => [
-                'description' => 'Error : Unauthorized',
-                'content' => [
-                    "application/json" => [
-                        "schema" => [
-                            "type" =>  "object",
-                            "example" => [
-                                'code' => 401,
-                                'message' => 'JWT Token not found'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            '404' => [
-                'description' => 'Resource not found',
-                'content' => [
-                    "application/json" => [
-                        "schema" => [
-                            "type" =>  "string",
-                            "example" => [
-                                "message" => 'User resource not found!'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-
-        ]
-    ], normalizationContext: ['groups' => 'read:User:Collection']),
+    new GetCollection(
+        normalizationContext: ['groups' => 'read:User:collection']),
     new Get(
-        routeName: 'getUser',
-        openapiContext: [
-        'responses' => [
-            '200' => [
-                'description' => 'User Resource',
-                'content' => [
-                    "application/json" => [
-                        "schema" => [
-                            "type" =>  "object",
-                            "example" => [
-                                'id' => "1",
-                                'firstName' => "John",
-                                'lastName' => "Doe",
-                                "customer" => "\/api\/customers\/46"
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            '403' => [
-                'description' => 'Error: Forbidden',
-                'content' => [
-                    "application/ld+json" => [
-                        "schema" => [
-                            "type" =>  "string",
-                            "example" => [
-                                "message" => 'Access Denied.'
-                            ]
-                        ]
-                    ]
-                ]
-                ],
-            '404' => [
-                'description' => 'Resource not found',
-                'content' => [
-                    "application/ld+json" => [
-                        "schema" => [
-                            "type" =>  "string",
-                            "example" => [
-                                "message" => 'User resource not found!'
-                            ]
-                        ]
-                    ]
-                ]
-                ]
-        ],
-        ],
         normalizationContext: ['groups' => 'read:User:item']
     ),
     new Post(
-        openapiContext: [
-            'requestBody' => [
-                'content' => [
-                    "application/ld+json" => [
-                        "schema" => [
-                            "type" =>  "object",
-                            "example" => [
-                                'firstName' => "Ada",
-                                'lastName' => "Lovelace",
-                                "customer" => "/api/customers/1"
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            'responses' => [
-                '201' => [
-                    'description' => 'User Resource created',
-                    'content' => [
-                        "application/ld+json" => [
-                            "schema" => [
-                                "type" =>  "object",
-                                "example" => [
-                                        "id" => 100,
-                                        "firstName" => "Ada",
-                                        "lastName" => "Lovelace",
-                                        "customer" => "\/api\/customers\/1"
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-                '422' => [
-                    'description' => 'Unprocessable Entity'
-                ]
-
-            ]
-        ],
         denormalizationContext: ['groups' => 'create:User:item'],
+        processor: UserStateProcessor::class,
     ),
-    new Delete(routeName: 'deleteUser', openapiContext: [
-        'responses' => [
-            '204' => [
-                'description' => 'No Content'
-            ],
-            '403' => [
-                'description' => 'Error: Forbidden',
-                'content' => [
-                    "application/json" => [
-                        "schema" => [
-                            "type" =>  "string",
-                            "example" => [
-                                "message" => 'Access Denied.'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            '404' => [
-                'description' => 'Error: Not Found',
-                'content' => [
-                    "application/json" => [
-                        "schema" => [
-                            "type" =>  "string",
-                            "example" => [
-                                "message" => 'User resource not found!'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ],
-    ]),
+    new Delete(
+        processor: UserStateProcessor::class
+    ),
     ]
 )]
 class User
@@ -206,9 +46,9 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('read:User:item')]
+    #[Groups(['read:User:item','read:User:collection'])]
     private ?int $id = null;
-    #[Groups(['read:User:item', 'create:User:item'])]
+    #[Groups(['read:User:item', 'create:User:item','read:User:collection'])]
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     #[Assert\Regex(
@@ -217,7 +57,7 @@ class User
         match: true,
     )]
     private ?string $firstName = null;
-    #[Groups(['read:User:item', 'create:User:item'])]
+    #[Groups(['read:User:item', 'create:User:item','read:User:collection'])]
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     #[Assert\Regex(
@@ -226,7 +66,7 @@ class User
         match: true,
     )]
     private ?string $lastName = null;
-    #[Groups(['read:User:item', 'create:User:item'])]
+    #[Groups(['read:User:item', 'create:User:item','read:User:collection'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide ! Veuillez spécifier le client auquel l\'utilisateur doit être affilié.')]
