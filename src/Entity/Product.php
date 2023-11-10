@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             openapiContext: [
             'responses' => [
                 '200' => [
-                    'description' => 'Products Collection',
+                    'description' => 'Product Resource',
                     'content' => [
                         "application/ld+json" => [
                             "schema" => [
@@ -46,7 +46,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
                 ],
                 '401' => [
-                    'description' => 'Error : Unauthorized',
+                    'description' => 'Error: Unauthorized',
                     'content' => [
                         "application/ld+json" => [
                             "schema" => [
@@ -60,7 +60,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     ]
                 ],
                 '404' => [
-                    'description' => 'Product resource not found',
+                    'description' => 'Error: Not Found',
                     'content' => [
                         "application/ld+json" => [
                             "schema" => [
@@ -105,7 +105,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
                     ],
                     '401' => [
-                        'description' => 'Error : Unauthorized',
+                        'description' => 'Error: Unauthorized',
                         'content' => [
                             "application/ld+json" => [
                                 "schema" => [

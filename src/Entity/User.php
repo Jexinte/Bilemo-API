@@ -96,7 +96,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ]
             ],
             '403' => [
-                'description' => 'Forbidden',
+                'description' => 'Error: Forbidden',
                 'content' => [
                     "application/ld+json" => [
                         "schema" => [
@@ -158,6 +158,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                         ]
                     ]
                 ],
+                '422' => [
+                    'description' => 'Unprocessable Entity'
+                ]
 
             ]
         ],
@@ -169,7 +172,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'No Content'
             ],
             '403' => [
-                'description' => 'Forbidden',
+                'description' => 'Error: Forbidden',
                 'content' => [
                     "application/json" => [
                         "schema" => [
@@ -182,7 +185,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ]
             ],
             '404' => [
-                'description' => 'Resource not found',
+                'description' => 'Error: Not Found',
                 'content' => [
                     "application/json" => [
                         "schema" => [
