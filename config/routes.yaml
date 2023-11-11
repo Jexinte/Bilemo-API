@@ -1,7 +1,3 @@
-deleteUser:
-    path: /api/users/{id}
-    controller: App\Controller\UserController::deleteUser
-    methods : DELETE
 controllers:
     resource:
         path: ../src/Controller/
