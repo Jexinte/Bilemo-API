@@ -26,7 +26,6 @@ security:
 
     access_control:
          - { path: ^/api/products, roles: ROLE_CUSTOMER }
-         - { path: ^/api/customers, roles: ROLE_CUSTOMER }
          - { path: ^/api/users, roles: ROLE_CUSTOMER }
 
 
