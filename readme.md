@@ -1,6 +1,6 @@
 # Description
 
-The aim of the project is to create a community site where users can create tricks, exchange information about their tricks and  modify the content of their tricks.
+The aim was to create an API for BileMo's customers, so that they could view their products via an api, while at the same time allowing customers to access their own user lists and add/delete users.
 
 
 # Installation
