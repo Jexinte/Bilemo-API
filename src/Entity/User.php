@@ -28,7 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
     new GetCollection(
-        normalizationContext: ['groups' => 'read:User:collection']),
+        normalizationContext: ['groups' => 'read:User:collection']
+    ),
     new Get(
         normalizationContext: ['groups' => 'read:User:item']
     ),

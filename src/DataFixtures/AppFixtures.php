@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 40; ++$i) {
             $customer = new Customer();
             $customer->setCompany($faker->company());
+            $customer->setPassword(password_hash('0000', PASSWORD_BCRYPT));
             $customer->setRoles(['ROLE_CUSTOMER']);
             $customers[] = $customer;
             $manager->persist($customer);
