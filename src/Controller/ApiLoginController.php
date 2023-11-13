@@ -16,15 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * PHP version 8.
- *
- * @category Controller
- * @package  ApiLoginController
- * @author   Yokke <mdembelepro@gmail.com>
- * @license  ISC License
- * @link     https://github.com/Jexinte/P7---Bilemo
- */
 class ApiLoginController extends AbstractController
 {
     /**

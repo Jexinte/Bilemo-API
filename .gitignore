@@ -8,6 +8,7 @@
 /var/
 /vendor/
 /tools
+.php-cs-fixer.cache
 ###< symfony/framework-bundle ###
 
 ###> phpstan/phpstan ###

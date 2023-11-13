@@ -14,19 +14,32 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
+use App\State\UserStateProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+
 #[ApiResource(
     operations: [
-    new Get(normalizationContext: ['groups' => 'read:User:item']),
-    new Post(denormalizationContext: ['groups' => 'create:User:item']),
-    new Delete(),
+    new GetCollection(
+        normalizationContext: ['groups' => 'read:User:collection']
+    ),
+    new Get(
+        normalizationContext: ['groups' => 'read:User:item']
+    ),
+    new Post(
+        denormalizationContext: ['groups' => 'create:User:item'],
+        processor: UserStateProcessor::class,
+    ),
+    new Delete(
+        processor: UserStateProcessor::class
+    ),
     ]
 )]
 class User
@@ -34,8 +47,9 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read:User:item','read:User:collection'])]
     private ?int $id = null;
-    #[Groups(['read:User:item', 'create:User:item'])]
+    #[Groups(['read:User:item', 'create:User:item','read:User:collection'])]
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     #[Assert\Regex(
@@ -44,7 +58,7 @@ class User
         match: true,
     )]
     private ?string $firstName = null;
-    #[Groups(['read:User:item', 'create:User:item'])]
+    #[Groups(['read:User:item', 'create:User:item','read:User:collection'])]
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide !')]
     #[Assert\Regex(
@@ -53,7 +67,7 @@ class User
         match: true,
     )]
     private ?string $lastName = null;
-    #[Groups(['read:User:item', 'create:User:item'])]
+    #[Groups(['read:User:item', 'create:User:item','read:User:collection'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
     #[Assert\NotBlank(message: 'Ce champ ne peut être vide ! Veuillez spécifier le client auquel l\'utilisateur doit être affilié.')]
@@ -82,7 +96,7 @@ class User
     /**
      * Summary of setFirstName
      *
-     * @param string $firstName 
+     * @param string $firstName
      *
      * @return $this
      */
@@ -106,7 +120,7 @@ class User
     /**
      * Summary of setLastName
      *
-     * @param string $lastName  
+     * @param string $lastName
      *
      * @return $this
      */
@@ -130,7 +144,7 @@ class User
     /**
      * Summary of setCustomer
      *
-     * @param Customer|null $customer   
+     * @param Customer|null $customer
      *
      * @return $this
      */
