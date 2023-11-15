@@ -34,6 +34,19 @@ use Symfony\Component\Validator\Constraints as Assert;
         normalizationContext: ['groups' => 'read:User:item']
     ),
     new Post(
+        openapiContext: [
+            'requestBody' => [
+                'description' => 'The new User resource',
+                'content' => [
+                    "application/ld+json" => [
+                        "example" => [
+                            "firstName"=> "string",
+                            "lastName"=> "string",
+                        ]
+                    ]
+                ]
+            ]
+        ],
         denormalizationContext: ['groups' => 'create:User:item'],
         processor: UserStateProcessor::class,
     ),
@@ -69,8 +82,7 @@ class User
     private ?string $lastName = null;
     #[Groups(['read:User:item', 'create:User:item','read:User:collection'])]
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
-    #[Assert\NotBlank(message: 'Ce champ ne peut être vide ! Veuillez spécifier le client auquel l\'utilisateur doit être affilié.')]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
     private Customer $customer;
 
     /**

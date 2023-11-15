@@ -47,13 +47,11 @@ class UserStateProcessor implements ProcessorInterface
     {
         $user = $this->tokenStorageInterface->getToken()->getUser();
 
-        switch (true) {
-            case $operation instanceof DeleteOperationInterface:
-                $this->removeProcessor->process($data, $operation, $uriVariables, $context);
-                return new JsonResponse(null, 204, [], false);
-            case $user->getId() == $data->getCustomer()->getId():
-                return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
-        }
-        throw new AccessDeniedException();
+     if($operation instanceof DeleteOperationInterface){
+         $this->removeProcessor->process($data, $operation, $uriVariables, $context);
+         return new JsonResponse(null, 204, [], false);
+     }
+       $data->setCustomer($user);
+       return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
     }
 }
